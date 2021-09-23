@@ -1,10 +1,16 @@
 import styled, { css } from "styled-components";
-import ValidatorContainer from "./validator/Validator.style";
+import Button from "../counter/button/Button.style";
 
 const formWidth = css`
   min-width: 30rem;
   width: 100%;
 `;
+
+export const ErrorUL = styled.ul`
+  list-style-type: square;
+  color: ${({ theme }) => theme.colors.red};
+`;
+
 
 export const InputContainer = styled.div`
   display: flex;
@@ -17,9 +23,23 @@ export const InputContainer = styled.div`
   }
 `;
 
+interface SubmitMessageProps {
+  show: boolean;
+}
+
+export const SubmitMessage = styled.p<SubmitMessageProps>`
+  display: ${({show}) => show ? "auto" : "none"};
+  margin: 0;
+`;
+
+export const SubmitButton = styled(Button)`
+  margin-left: auto;
+`;
+
 export const ButtonContainer = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   ${formWidth}
 `;
 
@@ -33,7 +53,7 @@ const EventFormContainer = styled.form`
   min-width: 30rem;
   width: 40rem;
 
-  ${ValidatorContainer} {
+  ${ErrorUL} > li:last-child {
     margin-bottom: 1rem;
   }
 `;
