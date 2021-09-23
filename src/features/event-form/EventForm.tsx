@@ -63,6 +63,8 @@ const EventForm: React.FC = () => {
           errorList.push("Please enter a date after today");
         }
         break;
+      default:
+        break;
     }
   };
 
