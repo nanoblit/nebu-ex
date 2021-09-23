@@ -85,7 +85,7 @@ const EventForm: React.FC = () => {
     setErrors(errorList);
     if (errorList.length === 0) {
       showAndHideSubmitMessage();
-      return dispatch(addEvent(eventData));
+      dispatch(addEvent(eventData));
     }
   };
 
