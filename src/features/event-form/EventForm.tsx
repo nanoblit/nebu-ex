@@ -6,11 +6,11 @@ import { useAppDispatch } from "../../app/hooks";
 import CenteredLayout from "../layout/CenteredLayout.style";
 import EventFormContainer, {
   ButtonContainer,
-  ErrorUL,
   InputContainer,
 } from "./EventForm.style";
 import Input from "../counter/input/Input.style";
 import Button from "../counter/button/Button.style";
+import Validator from "./validator/Validator";
 
 const EventForm: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -20,7 +20,7 @@ const EventForm: React.FC = () => {
     email: "",
     eventDate: format(Date.now(), "yyyy-MM-dd"),
   });
-  const [errors, setErrors] = useState<string[]>([]);
+  const [toValidate, setToValidate] = useState(0);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setEventData((prev) => ({
@@ -28,66 +28,25 @@ const EventForm: React.FC = () => {
       [e.target.id]: e.target.value,
     }));
 
-  const validateField = (
-    fieldName: string,
-    value: string,
-    errorList: string[]
-  ) => {
-    switch (fieldName) {
-      case "firstName":
-        const firstNameValid = value.match(/^[a-zA-Z ]{2,30}$/);
-        if (!firstNameValid) {
-          errorList.push("Please enter a valid first name");
-        }
-        break;
-      case "lastName":
-        const lastNameValid = value.match(/^[a-zA-Z ]{2,30}$/);
-        if (!lastNameValid) {
-          errorList.push("Please enter a valid last name");
-        }
-        break;
-      case "email":
-        const emailValid = value.toLowerCase().match(
-          // eslint-disable-next-line no-useless-escape
-          /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
-        );
-        if (!emailValid) {
-          errorList.push("Please enter a valid email");
-        }
-        break;
-      case "eventDate":
-        const date = new Date(value).getTime();
-        const currentDate = Date.now();
-        const dateValid = date - currentDate > 0;
-        if (!dateValid) {
-          errorList.push("Please enter a date after today");
-        }
-        break;
-      default:
-        break;
-    }
-  };
-
   const submitEvent = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const errorList: string[] = [];
-    for (const fieldName in eventData) {
-      validateField(fieldName, (eventData as any)[fieldName], errorList);
-    }
-    if (errorList.length === 0) {
+    setToValidate(prev => prev += 1);
+  };
+
+  const onValidated = (valid: boolean) => {
+    if (valid) {
       return dispatch(addEvent(eventData));
     }
-    setErrors(errorList);
-  };
+  }
 
   return (
     <CenteredLayout>
       <EventFormContainer onSubmit={submitEvent}>
-        <ErrorUL>
-          {errors.map((error, idx) => (
-            <li key={idx}>{error}</li>
-          ))}
-        </ErrorUL>
+        <Validator
+          eventData={eventData}
+          toValidate={toValidate}
+          onValidated={onValidated}
+        ></Validator>
         <InputContainer>
           <label htmlFor="firstName">First name</label>
           <Input
