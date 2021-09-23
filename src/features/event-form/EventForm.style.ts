@@ -5,6 +5,12 @@ const formWidth = css`
   width: 100%;
 `;
 
+export const ErrorUL = styled.ul`
+  list-style-type: square;
+  color: ${({ theme }) => theme.colors.red};
+  margin-bottom: 1rem;
+`;
+
 export const InputContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -27,8 +33,8 @@ const EventFormContainer = styled.form`
   flex-direction: column;
   align-items: center;
   padding: 1rem;
-  background: ${({theme}) => theme.colors.background};
-  border: 0.1rem solid ${({theme}) => theme.colors.text};
+  background: ${({ theme }) => theme.colors.background};
+  border: 0.1rem solid ${({ theme }) => theme.colors.text};
   min-width: 30rem;
   width: 40rem;
 `;

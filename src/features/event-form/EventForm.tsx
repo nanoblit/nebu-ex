@@ -6,6 +6,7 @@ import { useAppDispatch } from "../../app/hooks";
 import CenteredLayout from "../layout/CenteredLayout.style";
 import EventFormContainer, {
   ButtonContainer,
+  ErrorUL,
   InputContainer,
 } from "./EventForm.style";
 import Input from "../counter/input/Input.style";
@@ -17,35 +18,50 @@ const EventForm: React.FC = () => {
     firstName: "",
     lastName: "",
     email: "",
-    eventDate: format(new Date(Date.now()), "yyyy-MM-dd"),
+    eventDate: format(Date.now(), "yyyy-MM-dd"),
   });
   const [errors, setErrors] = useState<string[]>([]);
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setEventData((prev) => ({
       ...prev,
-      [e.target.id]: value,
+      [e.target.id]: e.target.value,
     }));
-  };
 
   const validateField = (
     fieldName: string,
-    value: string | Date,
+    value: string,
     errorList: string[]
   ) => {
     switch (fieldName) {
       case "firstName":
-        console.log(value);
+        const firstNameValid = value.match(/^[a-zA-Z ]{2,30}$/);
+        if (!firstNameValid) {
+          errorList.push("Please enter a valid first name");
+        }
         break;
       case "lastName":
-        console.log(value);
+        const lastNameValid = value.match(/^[a-zA-Z ]{2,30}$/);
+        if (!lastNameValid) {
+          errorList.push("Please enter a valid last name");
+        }
         break;
       case "email":
-        console.log(value);
+        const emailValid = value.toLowerCase().match(
+          // eslint-disable-next-line no-useless-escape
+          /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+        );
+        if (!emailValid) {
+          errorList.push("Please enter a valid email");
+        }
         break;
       case "eventDate":
-        console.log(value);
+        const date = new Date(value).getTime();
+        const currentDate = Date.now();
+        const dateValid = date - currentDate > 0;
+        if (!dateValid) {
+          errorList.push("Please enter a date after today");
+        }
         break;
     }
   };
@@ -56,13 +72,20 @@ const EventForm: React.FC = () => {
     for (const fieldName in eventData) {
       validateField(fieldName, (eventData as any)[fieldName], errorList);
     }
-    // do validation and show errors (toastify?)
-    dispatch(addEvent(eventData));
+    if (errorList.length === 0) {
+      return dispatch(addEvent(eventData));
+    }
+    setErrors(errorList);
   };
 
   return (
     <CenteredLayout>
       <EventFormContainer onSubmit={submitEvent}>
+        <ErrorUL>
+          {errors.map((error, idx) => (
+            <li key={idx}>{error}</li>
+          ))}
+        </ErrorUL>
         <InputContainer>
           <label htmlFor="firstName">First name</label>
           <Input

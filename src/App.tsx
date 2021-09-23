@@ -5,9 +5,10 @@ import GlobalStyle from "./styles/global.style";
 
 const theme: DefaultTheme = {
   colors: {
-    text: "#526A94FF",
-    background: "#0C1B35FF",
-    hover: "#12274DFF"
+    text: "#6684B8",
+    background: "#0C1B35",
+    hover: "#12274D",
+    red: "#E45B9D"
   },
 };
 
