@@ -9,8 +9,11 @@ const formWidth = css`
 export const ErrorUL = styled.ul`
   list-style-type: square;
   color: ${({ theme }) => theme.colors.red};
-`;
 
+  & > li:last-child {
+    margin-bottom: 1rem;
+  }
+`;
 
 export const InputContainer = styled.div`
   display: flex;
@@ -28,7 +31,7 @@ interface SubmitMessageProps {
 }
 
 export const SubmitMessage = styled.p<SubmitMessageProps>`
-  display: ${({show}) => show ? "auto" : "none"};
+  display: ${({ show }) => (show ? "auto" : "none")};
   margin: 0;
 `;
 
@@ -52,10 +55,6 @@ const EventFormContainer = styled.form`
   border: 0.1rem solid ${({ theme }) => theme.colors.text};
   min-width: 30rem;
   width: 40rem;
-
-  ${ErrorUL} > li:last-child {
-    margin-bottom: 1rem;
-  }
 `;
 
 export default EventFormContainer;
