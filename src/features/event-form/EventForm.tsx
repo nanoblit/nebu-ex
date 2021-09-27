@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
 
 import { addEvent, Event } from "./eventSlice";
@@ -12,25 +12,34 @@ import EventFormContainer, {
   SubmitMessage,
 } from "./EventForm.style";
 import Input from "../counter/input/Input.style";
-import { setTimeout } from "timers";
+import { clearTimeout, setTimeout } from "timers";
+
+const tomorrow = () => {
+  const today = new Date();
+  const tomorrow = new Date(today);
+  return tomorrow.setDate(tomorrow.getDate() + 1);
+};
+
+const defaultEventData: Event = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  eventDate: format(tomorrow(), "yyyy-MM-dd"),
+};
 
 const EventForm: React.FC = () => {
   const dispatch = useAppDispatch();
-  const [eventData, setEventData] = useState<Event>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    eventDate: format(Date.now(), "yyyy-MM-dd"),
-  });
+  const [eventData, setEventData] = useState<Event>(defaultEventData);
   const [errors, setErrors] = useState<string[]>([]);
   const [isSubmitMessageShown, setIsSubmitMessageShown] = useState(false);
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
     setEventData((prev) => ({
       ...prev,
-      [e.target.id]: e.target.value,
+      [e.target.id]: value,
     }));
-
+  };
   const validateField = (
     fieldName: string,
     value: string,
@@ -72,17 +81,21 @@ const EventForm: React.FC = () => {
   };
 
   const showAndHideSubmitMessage = () => {
-    setIsSubmitMessageShown(true);
-    setTimeout(() => setIsSubmitMessageShown(false), 5000);
+    setIsSubmitMessageShown(() => true);
   };
 
+  useEffect(() => {
+    if (isSubmitMessageShown) {
+      const timer = setTimeout(() => {
+        console.log("hello");
+        setIsSubmitMessageShown(() => false);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [isSubmitMessageShown]);
+
   const resetEventData = () => {
-    setEventData({
-      firstName: "",
-      lastName: "",
-      email: "",
-      eventDate: format(Date.now(), "yyyy-MM-dd"),
-    });
+    setEventData(defaultEventData);
   };
 
   const submitEvent = (e: React.FormEvent<HTMLFormElement>) => {

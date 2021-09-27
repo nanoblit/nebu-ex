@@ -19,16 +19,14 @@ import userEvent from "@testing-library/user-event";
 
 describe("event form", () => {
   const setup = () => {
-    act(() => {
-      render(
-        <Provider store={store}>
-          <ThemeProvider theme={theme}>
-            <GlobalStyle />
-            <EventForm />
-          </ThemeProvider>
-        </Provider>
-      );
-    });
+    render(
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          <EventForm />
+        </ThemeProvider>
+      </Provider>
+    );
 
     return {
       firstNameInput: screen.getByLabelText("First name") as HTMLInputElement,
@@ -39,7 +37,7 @@ describe("event form", () => {
     };
   };
 
-  beforeEach(() => jest.useFakeTimers());
+  beforeEach(() => jest.useFakeTimers("modern"));
 
   afterAll(() => jest.useRealTimers());
 
@@ -59,26 +57,16 @@ describe("event form", () => {
   });
 
   it("should show and hide the event created message", async () => {
-    const {
-      firstNameInput,
-      lastNameInput,
-      emailInput,
-      eventDateInput,
-      submitButton,
-    } = setup();
+    const { firstNameInput, lastNameInput, emailInput, submitButton } = setup();
 
     userEvent.type(firstNameInput, "John");
     userEvent.type(lastNameInput, "Doe");
     userEvent.type(emailInput, "john.doe@gmail.com");
-    userEvent.type(eventDateInput, "2099-09-30");
 
     expect(screen.queryByText("Event created!")).not.toBeInTheDocument();
     userEvent.click(submitButton);
-    await waitFor(() => { 
-      expect(screen.getByText("Event created!")).toBeInTheDocument();
-    })
-
-    await waitForElementToBeRemoved(screen.queryByText("Event created!"));
-    expect(screen.queryByText("Event created!")).not.toBeInTheDocument(); 
+    expect(await screen.findByText("Event created!")).toBeInTheDocument();
+    // jest.runAllTimers();
+    // expect(screen.queryByText("Event created!")).not.toBeInTheDocument(); 
   });
 });
