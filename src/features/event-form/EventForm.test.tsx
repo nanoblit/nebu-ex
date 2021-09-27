@@ -5,6 +5,7 @@ import {
   fireEvent,
   act,
   waitForElementToBeRemoved,
+  waitFor,
 } from "@testing-library/react";
 
 import EventForm from "./EventForm";
@@ -16,7 +17,7 @@ import GlobalStyle from "../../styles/global.style";
 import { format } from "date-fns";
 import userEvent from "@testing-library/user-event";
 
-describe("event form", async () => {
+describe("event form", () => {
   const setup = () => {
     act(() => {
       render(
@@ -73,9 +74,11 @@ describe("event form", async () => {
 
     expect(screen.queryByText("Event created!")).not.toBeInTheDocument();
     userEvent.click(submitButton);
-    expect(screen.getByText("Event created!")).toBeInTheDocument();
+    await waitFor(() => { 
+      expect(screen.getByText("Event created!")).toBeInTheDocument();
+    })
 
     await waitForElementToBeRemoved(screen.queryByText("Event created!"));
-    expect(screen.queryByText("Event created!")).not.toBeInTheDocument();
+    expect(screen.queryByText("Event created!")).not.toBeInTheDocument(); 
   });
 });
