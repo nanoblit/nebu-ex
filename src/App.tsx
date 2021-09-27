@@ -3,7 +3,7 @@ import { DefaultTheme, ThemeProvider } from "styled-components";
 import EventForm from "./features/event-form/EventForm";
 import GlobalStyle from "./styles/global.style";
 
-const theme: DefaultTheme = {
+export const theme: DefaultTheme = {
   colors: {
     text: "#6684B8",
     background: "#0C1B35",

@@ -26,12 +26,8 @@ export const InputContainer = styled.div`
   }
 `;
 
-interface SubmitMessageProps {
-  show: boolean;
-}
 
-export const SubmitMessage = styled.p<SubmitMessageProps>`
-  display: ${({ show }) => (show ? "auto" : "none")};
+export const SubmitMessage = styled.p`
   margin: 0;
 `;
 
@@ -53,7 +49,7 @@ const EventFormContainer = styled.form`
   padding: 1rem;
   background: ${({ theme }) => theme.colors.background};
   border: 0.1rem solid ${({ theme }) => theme.colors.text};
-  min-width: 30rem;
+  ${formWidth};
   width: 40rem;
 `;
 

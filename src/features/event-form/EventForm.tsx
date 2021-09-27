@@ -144,9 +144,10 @@ const EventForm: React.FC = () => {
           />
         </InputContainer>
         <ButtonContainer>
-          <SubmitMessage show={isSubmitMessageShown}>
-            Event created!
-          </SubmitMessage>
+          {isSubmitMessageShown && (
+            <SubmitMessage>Event created!</SubmitMessage>
+          )}
+
           <SubmitButton as="input" type="submit" value="Submit" />
         </ButtonContainer>
       </EventFormContainer>
