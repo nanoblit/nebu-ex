@@ -1,12 +1,4 @@
-import React from "react";
-import {
-  render,
-  screen,
-  fireEvent,
-  act,
-  waitForElementToBeRemoved,
-  waitFor,
-} from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 
 import EventForm from "./EventForm";
 import { store } from "../../app/store";
@@ -14,7 +6,6 @@ import { Provider } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import { theme } from "../../App";
 import GlobalStyle from "../../styles/global.style";
-import { format } from "date-fns";
 import userEvent from "@testing-library/user-event";
 
 describe("event form", () => {
@@ -75,6 +66,6 @@ describe("event form", () => {
 
     userEvent.click(submitButton);
 
-    expect(await screen.findAllByText(/^Please enter/)).toBeInstanceOf(Array);  
+    expect(await screen.findAllByText(/^Please enter/)).toBeInstanceOf(Array);
   });
 });
