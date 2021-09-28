@@ -67,6 +67,14 @@ describe("event form", () => {
     userEvent.click(submitButton);
     expect(await screen.findByText("Event created!")).toBeInTheDocument();
     // jest.runAllTimers();
-    // expect(screen.queryByText("Event created!")).not.toBeInTheDocument(); 
+    // expect(screen.queryByText("Event created!")).not.toBeInTheDocument();
+  });
+
+  it("should show errors", async () => {
+    const { submitButton } = setup();
+
+    userEvent.click(submitButton);
+
+    expect(await screen.findAllByText(/^Please enter/)).toBeInstanceOf(Array);  
   });
 });
