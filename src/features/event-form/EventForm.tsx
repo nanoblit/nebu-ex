@@ -11,7 +11,7 @@ import EventFormContainer, {
   SubmitButton,
   SubmitMessage,
 } from "./EventForm.style";
-import Input from "../counter/input/Input.style";
+import Input from "../common/input/Input.style";
 import { clearTimeout, setTimeout } from "timers";
 
 const tomorrow = () => {

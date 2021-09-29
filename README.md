@@ -1,8 +1,11 @@
-## Running the app
+## Run the app
+
 npm install
 
 npm start
-## Testing the app
+
+## Test the app
+
 npm install
 
 npm test
