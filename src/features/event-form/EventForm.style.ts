@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import Button from "../counter/button/Button.style";
+import Button from "../common/button/Button.style";
 
 const formWidth = css`
   min-width: 30rem;
